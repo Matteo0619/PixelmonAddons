@@ -34,6 +34,8 @@ gradle-app.setting
 !gradle-wrapper.jar
 run/
 run-data/
+logs/
+test/
 
 ##############################
 ## IntelliJ
@@ -83,4 +85,6 @@ nb-configuration.xml
 ## OS X
 ##############################
 .DS_Store
+
+/gradle/wrapper/gradle-wrapper.jar
 

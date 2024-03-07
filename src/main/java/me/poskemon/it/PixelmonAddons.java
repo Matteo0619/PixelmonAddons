@@ -1,9 +1,9 @@
 package me.poskemon.it;
 
 import com.pixelmonmod.pixelmon.api.config.api.yaml.YamlConfigFactory;
-import me.poskemon.it.command.ChangeGenderCommand;
-import me.poskemon.it.command.PokemonTypeCommand;
-import me.poskemon.it.command.ResetEvsCommand;
+import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
+import me.poskemon.it.command.*;
+import me.poskemon.it.config.CommandsConfig;
 import me.poskemon.it.config.ExampleConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -20,6 +20,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Mod(PixelmonAddons.MOD_ID)
 @Mod.EventBusSubscriber(modid = PixelmonAddons.MOD_ID)
@@ -30,7 +34,7 @@ public class PixelmonAddons {
 
     private static PixelmonAddons instance;
 
-    private ExampleConfig config;
+    private CommandsConfig config;
 
     public PixelmonAddons() {
         instance = this;
@@ -45,9 +49,6 @@ public class PixelmonAddons {
 
     public static void onModLoad(FMLCommonSetupEvent event) {
 
-        // Here is how you register a listener for Pixelmon events
-        // Pixelmon has its own event bus for its events, as does TCG
-        // So any event listener for those mods need to be registered to those specific event buses
 
     }
 
@@ -58,7 +59,7 @@ public class PixelmonAddons {
 
     public void reloadConfig() {
         try {
-            this.config = YamlConfigFactory.getInstance(ExampleConfig.class);
+            this.config = YamlConfigFactory.getInstance(CommandsConfig.class);
         } catch (IOException e) {
             LOGGER.error("Failed to load config", e);
         }
@@ -75,6 +76,8 @@ public class PixelmonAddons {
         ResetEvsCommand.register(event.getDispatcher());
         ChangeGenderCommand.register(event.getDispatcher());
         PokemonTypeCommand.register(event.getDispatcher());
+        SpawnRandomLegendaryCommand.register(event.getDispatcher());
+        SpawnRandomUltraBeastCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
@@ -84,7 +87,6 @@ public class PixelmonAddons {
 
     @SubscribeEvent
     public static void onServerStopped(FMLServerStoppedEvent event) {
-
 
 
     }
@@ -97,10 +99,9 @@ public class PixelmonAddons {
         return LOGGER;
     }
 
-    public static ExampleConfig getConfig() {
+    public static CommandsConfig getConfig() {
         return instance.config;
     }
-
 
 }
 

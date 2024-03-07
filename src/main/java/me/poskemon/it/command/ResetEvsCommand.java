@@ -1,7 +1,6 @@
 package me.poskemon.it.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
@@ -11,7 +10,6 @@ import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.server.permission.PermissionAPI;
