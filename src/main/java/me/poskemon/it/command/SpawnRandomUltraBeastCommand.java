@@ -3,9 +3,9 @@ package me.poskemon.it.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonBuilder;
-import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
@@ -46,24 +46,7 @@ public class SpawnRandomUltraBeastCommand {
 
                                     }
 
-                                    LocationInput pos = context.getArgument("pos", LocationInput.class);
-
-                                    Species specie;
-
-                                    specie = PixelmonSpecies.getRandomUltraBeast();
-
-                                    Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(false).build();
-
-                                    PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
-                                            context.getSource().getLevel(),
-                                            pos.getPosition(context.getSource()).x,
-                                            pos.getPosition(context.getSource()).y,
-                                            pos.getPosition(context.getSource()).z
-                                    );
-                                    pokeEntity.canDespawn = false;
-                                    pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
-                                    context.getSource().getLevel().addFreshEntity(pokeEntity);
-                                    pokeEntity.resetAI();
+                                    spawnRandomUc(context, false);
 
                                     return 1;
                                 })
@@ -86,24 +69,7 @@ public class SpawnRandomUltraBeastCommand {
                                                 return 0;
                                             }
 
-                                            LocationInput pos = context.getArgument("pos", LocationInput.class);
-
-                                            Species specie;
-
-                                            specie = PixelmonSpecies.getRandomUltraBeast();
-
-                                            Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny().build();
-
-                                            PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
-                                                    context.getSource().getLevel(),
-                                                    pos.getPosition(context.getSource()).x,
-                                                    pos.getPosition(context.getSource()).y,
-                                                    pos.getPosition(context.getSource()).z
-                                            );
-                                            pokeEntity.canDespawn = false;
-                                            pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
-                                            context.getSource().getLevel().addFreshEntity(pokeEntity);
-                                            pokeEntity.resetAI();
+                                            spawnRandomUc(context, true);
 
                                             return 1;
                                         })
@@ -113,6 +79,27 @@ public class SpawnRandomUltraBeastCommand {
 
         );
 
+    }
+
+    private static void spawnRandomUc(CommandContext<CommandSource> context, boolean shiny) {
+        LocationInput pos = context.getArgument("pos", LocationInput.class);
+
+        Species specie;
+
+        specie = PixelmonSpecies.getRandomUltraBeast();
+
+        Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(shiny).build();
+
+        PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
+                context.getSource().getLevel(),
+                pos.getPosition(context.getSource()).x,
+                pos.getPosition(context.getSource()).y,
+                pos.getPosition(context.getSource()).z
+        );
+        pokeEntity.canDespawn = false;
+        pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
+        context.getSource().getLevel().addFreshEntity(pokeEntity);
+        pokeEntity.resetAI();
     }
 
     private static boolean isSpecieValid(Species species) {

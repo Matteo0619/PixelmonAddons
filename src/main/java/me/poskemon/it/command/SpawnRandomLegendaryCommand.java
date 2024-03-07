@@ -3,6 +3,7 @@ package me.poskemon.it.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonBuilder;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
@@ -45,26 +46,7 @@ public class SpawnRandomLegendaryCommand {
 
                                     }
 
-                                    LocationInput pos = context.getArgument("pos", LocationInput.class);
-
-                                    Species specie;
-
-                                    do{
-                                        specie = PixelmonSpecies.getRandomLegendary(false);
-                                    } while (!isSpecieValid(specie));
-
-                                    Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(false).build();
-
-                                    PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
-                                            context.getSource().getLevel(),
-                                            pos.getPosition(context.getSource()).x,
-                                            pos.getPosition(context.getSource()).y,
-                                            pos.getPosition(context.getSource()).z
-                                    );
-                                    pokeEntity.canDespawn = false;
-                                    pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
-                                    context.getSource().getLevel().addFreshEntity(pokeEntity);
-                                    pokeEntity.resetAI();
+                                    spawnRandomLegendary(context, false);
 
                                     return 1;
                                 })
@@ -87,26 +69,7 @@ public class SpawnRandomLegendaryCommand {
                                                 return 0;
                                             }
 
-                                            LocationInput pos = context.getArgument("pos", LocationInput.class);
-
-                                            Species specie;
-
-                                            do{
-                                                specie = PixelmonSpecies.getRandomLegendary(false);
-                                            } while (!isSpecieValid(specie));
-
-                                            Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny().build();
-
-                                            PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
-                                                    context.getSource().getLevel(),
-                                                    pos.getPosition(context.getSource()).x,
-                                                    pos.getPosition(context.getSource()).y,
-                                                    pos.getPosition(context.getSource()).z
-                                            );
-                                            pokeEntity.canDespawn = false;
-                                            pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
-                                            context.getSource().getLevel().addFreshEntity(pokeEntity);
-                                            pokeEntity.resetAI();
+                                            spawnRandomLegendary(context, true);
 
                                             return 1;
                                         })
@@ -116,6 +79,29 @@ public class SpawnRandomLegendaryCommand {
 
         );
 
+    }
+
+    private static void spawnRandomLegendary(CommandContext<CommandSource> context, boolean shiny) {
+        LocationInput pos = context.getArgument("pos", LocationInput.class);
+
+        Species specie;
+
+        do{
+            specie = PixelmonSpecies.getRandomLegendary(false);
+        } while (!isSpecieValid(specie));
+
+        Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(shiny).build();
+
+        PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
+                context.getSource().getLevel(),
+                pos.getPosition(context.getSource()).x,
+                pos.getPosition(context.getSource()).y,
+                pos.getPosition(context.getSource()).z
+        );
+        pokeEntity.canDespawn = false;
+        pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
+        context.getSource().getLevel().addFreshEntity(pokeEntity);
+        pokeEntity.resetAI();
     }
 
     private static boolean isSpecieValid(Species species) {
