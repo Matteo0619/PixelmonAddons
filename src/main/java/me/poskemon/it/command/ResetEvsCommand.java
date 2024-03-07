@@ -27,7 +27,16 @@ public class ResetEvsCommand {
                         .then(Commands.argument("slot", StringArgumentType.greedyString())
                                 .executes(context -> {
 
-                                    if(!PermissionAPI.hasPermission(context.getSource().getPlayerOrException(), "pixelmonaddons.command.resetevs")) {
+                                    ServerPlayerEntity player;
+
+                                    try {
+                                        player = context.getSource().getPlayerOrException();
+                                    } catch (Exception e) {
+                                        context.getSource().sendFailure(new StringTextComponent("This is a player only command!"));
+                                        return 0;
+                                    }
+
+                                    if(!PermissionAPI.hasPermission(player, "pixelmonaddons.command.resetevs")) {
                                         StringTextComponent message = new StringTextComponent("You do not have access to this command!");
                                         message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
                                         context.getSource().sendFailure(message);
@@ -39,28 +48,19 @@ public class ResetEvsCommand {
                                     try {
                                         slot = Integer.parseInt(context.getArgument("slot", String.class));
                                     } catch (Exception e) {
-                                        context.getSource().sendFailure(new StringTextComponent("Invalid number"));
+                                        context.getSource().sendFailure(new StringTextComponent("Slot value must be a number!"));
                                         return 0;
                                     }
 
                                     if(slot < 1 || slot > 6) {
-                                        context.getSource().sendFailure(new StringTextComponent("Invalid slot"));
-                                        return 0;
-                                    }
-
-                                    ServerPlayerEntity player;
-
-                                    try {
-                                        player = context.getSource().getPlayerOrException();
-                                    } catch (Exception e) {
-                                        context.getSource().sendFailure(new StringTextComponent("This is a player only command!"));
+                                        context.getSource().sendFailure(new StringTextComponent("Invalid slot!"));
                                         return 0;
                                     }
 
                                     PlayerPartyStorage party = StorageProxy.getParty(player);
 
                                     if(party.get(slot-1) == null) {
-                                        context.getSource().sendFailure(new StringTextComponent("The input slot is empty"));
+                                        context.getSource().sendFailure(new StringTextComponent("The input slot is empty!"));
                                         return 0;
                                     }
 

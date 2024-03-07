@@ -11,6 +11,7 @@ import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -43,7 +44,16 @@ public class PokemonTypeCommand {
                             return ISuggestionProvider.suggest(PixelmonSpecies.getAll().stream().map(Species::getName), b);})
                         .executes(context -> {
 
-                            if(!PermissionAPI.hasPermission(context.getSource().getPlayerOrException(), "pixelmonaddons.command.type")) {
+                            ServerPlayerEntity player;
+
+                            try {
+                                player = context.getSource().getPlayerOrException();
+                            } catch (Exception e) {
+                                context.getSource().sendFailure(new StringTextComponent("This is a player only command!"));
+                                return 0;
+                            }
+
+                            if(!PermissionAPI.hasPermission(player, "pixelmonaddons.command.type")) {
                                 StringTextComponent message = new StringTextComponent("You do not have access to this command!");
                                 message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
                                 context.getSource().sendFailure(message);
