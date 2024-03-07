@@ -34,11 +34,15 @@ public class SpawnRandomLegendaryCommand {
                         .then(Commands.argument("action", StringArgumentType.word())
                                 .executes(context -> {
 
-                                    if(!PermissionAPI.hasPermission(context.getSource().getPlayerOrException(), "pixelmonaddons.command.random-legendary-uc")) {
-                                        StringTextComponent message = new StringTextComponent("You do not have access to this command!");
-                                        message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
-                                        context.getSource().sendFailure(message);
-                                        return 0;
+                                    try{
+                                        if(!PermissionAPI.hasPermission(context.getSource().getPlayerOrException(), "pixelmonaddons.command.random-legendary-uc")) {
+                                            StringTextComponent message = new StringTextComponent("You do not have access to this command!");
+                                            message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
+                                            context.getSource().sendFailure(message);
+                                            return 0;
+                                        }
+                                    } catch (Exception ignored){
+
                                     }
 
                                     LocationInput pos = context.getArgument("pos", LocationInput.class);
@@ -67,11 +71,15 @@ public class SpawnRandomLegendaryCommand {
                                 .then(Commands.argument("shiny", StringArgumentType.word())
                                         .executes(context -> {
 
-                                            if(!PermissionAPI.hasPermission(context.getSource().getPlayerOrException(), "pixelmonaddons.command.random-legendary-uc.shiny")) {
-                                                StringTextComponent message = new StringTextComponent("You do not have access to this command!");
-                                                message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
-                                                context.getSource().sendFailure(message);
-                                                return 0;
+                                            try{
+                                                if(!PermissionAPI.hasPermission(context.getSource().getPlayerOrException(), "pixelmonaddons.command.random-legendary-uc")) {
+                                                    StringTextComponent message = new StringTextComponent("You do not have access to this command!");
+                                                    message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
+                                                    context.getSource().sendFailure(message);
+                                                    return 0;
+                                                }
+                                            } catch (Exception ignored){
+
                                             }
 
                                             if(!context.getArgument("shiny", String.class).equalsIgnoreCase("shiny")) {
