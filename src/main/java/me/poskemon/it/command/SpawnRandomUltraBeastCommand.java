@@ -17,8 +17,12 @@ import net.minecraft.command.arguments.LocationInput;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.server.permission.PermissionAPI;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SpawnRandomUltraBeastCommand {
+
+    public static final Logger LOGGER = LogManager.getLogger(SpawnRandomUltraBeastCommand.class);
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
 
@@ -100,6 +104,8 @@ public class SpawnRandomUltraBeastCommand {
         pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
         context.getSource().getLevel().addFreshEntity(pokeEntity);
         pokeEntity.resetAI();
+
+        LOGGER.info("Random UltraBeast spawned. Type: {}, Shiny: {}", specie.getName(), shiny );
     }
 
     private static boolean isSpecieValid(Species species) {

@@ -17,8 +17,12 @@ import net.minecraft.command.arguments.LocationInput;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.server.permission.PermissionAPI;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SpawnRandomLegendaryCommand {
+
+    public static final Logger LOGGER = LogManager.getLogger(SpawnRandomLegendaryCommand.class);
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
 
@@ -102,6 +106,8 @@ public class SpawnRandomLegendaryCommand {
         pokeEntity.setSpawnLocation(pokeEntity.getDefaultSpawnLocation());
         context.getSource().getLevel().addFreshEntity(pokeEntity);
         pokeEntity.resetAI();
+
+        LOGGER.info("Random legendary spawned. Type: {}, Shiny: {}", specie.getName(), shiny);
     }
 
     private static boolean isSpecieValid(Species species) {
