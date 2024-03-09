@@ -142,5 +142,4 @@ task versionedRelease(type: Copy) { // This creates a jar with a version number 
 
 
 jar.finalizedBy('shadowJar')
-shadowJar.finalizedBy('reobfJar')
 build.finalizedBy('versionedRelease')
