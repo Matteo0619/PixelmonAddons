@@ -94,7 +94,9 @@ public class SpawnRandomLegendaryCommand {
             specie = PixelmonSpecies.getRandomLegendary(false);
         } while (!isSpecieValid(specie));
 
-        Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(shiny).build();
+        int level = PixelmonAddons.getConfig().getRandomLegendaryLevel();
+
+        Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(shiny).level(level).build();
 
         PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
                 context.getSource().getLevel(),

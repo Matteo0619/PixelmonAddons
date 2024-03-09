@@ -92,7 +92,9 @@ public class SpawnRandomUltraBeastCommand {
 
         specie = PixelmonSpecies.getRandomUltraBeast();
 
-        Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(shiny).build();
+        int level = PixelmonAddons.getConfig().getRandomLegendaryLevel();
+
+        Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(shiny).level(level).build();
 
         PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
                 context.getSource().getLevel(),
@@ -106,12 +108,6 @@ public class SpawnRandomUltraBeastCommand {
         pokeEntity.resetAI();
 
         LOGGER.info("Random UltraBeast spawned. Type: {}, Shiny: {}", specie.getName(), shiny );
-    }
-
-    private static boolean isSpecieValid(Species species) {
-
-        return !PixelmonAddons.getConfig().getBlacklistedLegendaries().contains(species.getName());
-
     }
 
 }
