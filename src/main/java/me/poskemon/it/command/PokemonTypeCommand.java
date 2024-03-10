@@ -24,14 +24,6 @@ import java.util.stream.Collectors;
 public class PokemonTypeCommand {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
 
-        Map<Float, Set<StringTextComponent>> map = new HashMap<>();
-
-        map.put(4.0F, new HashSet<>());
-        map.put(2.0F, new HashSet<>());
-        map.put(0.5F, new HashSet<>());
-        map.put(0.25F, new HashSet<>());
-        map.put(0.0F, new HashSet<>());
-
         dispatcher.register(LiteralArgumentBuilder.<CommandSource>literal("type")
                 .executes(context -> {
                     StringTextComponent message = new StringTextComponent("You need to specify a pokemon!");
@@ -70,6 +62,14 @@ public class PokemonTypeCommand {
                                 context.getSource().sendSuccess(message, false);
                                 return 0;
                             }
+
+                            Map<Float, Set<StringTextComponent>> map = new HashMap<>();
+
+                            map.put(4.0F, new HashSet<>());
+                            map.put(2.0F, new HashSet<>());
+                            map.put(0.5F, new HashSet<>());
+                            map.put(0.25F, new HashSet<>());
+                            map.put(0.0F, new HashSet<>());
 
                             Species pokemon = optional.get().getValueUnsafe();
 
