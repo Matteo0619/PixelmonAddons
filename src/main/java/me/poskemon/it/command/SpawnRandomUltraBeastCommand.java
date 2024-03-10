@@ -7,6 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonBuilder;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
+import com.pixelmonmod.pixelmon.api.pokemon.stats.IVStore;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import me.poskemon.it.PixelmonAddons;
@@ -94,7 +95,12 @@ public class SpawnRandomUltraBeastCommand {
 
         int level = PixelmonAddons.getConfig().getRandomLegendaryLevel();
 
-        Pokemon pokemon = PokemonBuilder.builder().species(specie.getDex()).shiny(shiny).level(level).build();
+        Pokemon pokemon = PokemonBuilder.builder()
+                .species(specie.getDex())
+                .shiny(shiny)
+                .level(level)
+                .ivs(IVStore.createNewIVs3Perfect().getArray())
+                .build();
 
         PixelmonEntity pokeEntity = pokemon.getOrCreatePixelmon(
                 context.getSource().getLevel(),
