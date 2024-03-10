@@ -19,11 +19,23 @@ public class CommandsConfig extends AbstractYamlConfig {
 
     private List<String> addedLegendaries = Lists.newArrayList("IronLeaves", "WalkingWake");
 
+    private int randomLegendaryLevel = 70;
+
+    private int randomUltraBeastLevel = 70;
+
     public List<String> getBlacklistedLegendaries() {
         return blacklistedLegendaries;
     }
 
     public List<String> getAddedLegendaries() {
         return addedLegendaries;
+    }
+
+    public int getRandomLegendaryLevel() {
+        return randomLegendaryLevel;
+    }
+
+    public int getRandomUltraBeastLevel() {
+        return randomUltraBeastLevel;
     }
 }
