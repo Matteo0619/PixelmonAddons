@@ -32,12 +32,12 @@ public class LastLegendaryCommand {
                         return 0;
                     }
 
-//                    if (!PermissionAPI.hasPermission(player, "pixelmonaddons.command.lastlegendary")) {
-//                        StringTextComponent message = new StringTextComponent("You do not have access to this command!");
-//                        message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
-//                        context.getSource().sendFailure(message);
-//                        return 0;
-//                    }
+                    if (!PermissionAPI.hasPermission(player, "pixelmonaddons.command.lastlegendary")) {
+                        StringTextComponent message = new StringTextComponent("You do not have access to this command!");
+                        message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
+                        context.getSource().sendFailure(message);
+                        return 0;
+                    }
 
                     List<UUID> uuids = new ArrayList<>(PixelmonAddons.getLastLegendaries().keySet());
 
