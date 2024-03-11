@@ -1,10 +1,9 @@
 package me.poskemon.it;
 
 import com.pixelmonmod.pixelmon.api.config.api.yaml.YamlConfigFactory;
-import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import me.poskemon.it.command.*;
 import me.poskemon.it.config.CommandsConfig;
-import me.poskemon.it.config.ExampleConfig;
+import me.poskemon.it.listener.LastLegendaryListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,10 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Mod(PixelmonAddons.MOD_ID)
 @Mod.EventBusSubscriber(modid = PixelmonAddons.MOD_ID)
@@ -35,6 +31,8 @@ public class PixelmonAddons {
     private static PixelmonAddons instance;
 
     private CommandsConfig config;
+
+    private static Map<UUID, LastLegendaryData> lastLegendaries = new HashMap<>();
 
     public PixelmonAddons() {
         instance = this;
@@ -54,7 +52,7 @@ public class PixelmonAddons {
 
     @SubscribeEvent
     public static void onServerStarting(FMLServerStartingEvent event) {
-
+        new LastLegendaryListener();
     }
 
     public void reloadConfig() {
@@ -78,6 +76,7 @@ public class PixelmonAddons {
         PokemonTypeCommand.register(event.getDispatcher());
         SpawnRandomLegendaryCommand.register(event.getDispatcher());
         SpawnRandomUltraBeastCommand.register(event.getDispatcher());
+        LastLegendaryCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
@@ -103,5 +102,8 @@ public class PixelmonAddons {
         return instance.config;
     }
 
+    public static Map<UUID, LastLegendaryData> getLastLegendaries() {
+        return lastLegendaries;
+    }
 }
 
