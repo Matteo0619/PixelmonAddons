@@ -51,6 +51,11 @@ public class LastLegendaryListener {
 
         PixelmonEntity entity = event.getPokemon();
 
+        if(event.getPokemon() == null) {
+            return;
+        }
+
+
         UUID id = entity.getUUID();
 
         Map<UUID, LastLegendaryData> lastLegendaries = PixelmonAddons.getLastLegendaries();
