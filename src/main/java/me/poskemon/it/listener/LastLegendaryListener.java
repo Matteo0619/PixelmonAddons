@@ -6,6 +6,7 @@ import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
+import com.pixelmonmod.pixelmon.api.spawning.archetypes.entities.pokemon.SpawnActionPokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import me.poskemon.it.LastLegendaryData;
 import me.poskemon.it.LastLegendaryStatus;
@@ -27,9 +28,15 @@ public class LastLegendaryListener {
     @SubscribeEvent
     public void onLegendarySpawn(SpawnEvent event) {
 
-        Entity entity = event.action.getOrCreateEntity();
+        SpawnActionPokemon action = (SpawnActionPokemon) event.action;
+
+        Entity entity = action.getOrCreateEntity();
 
         if(!(entity instanceof PixelmonEntity)) {
+            return;
+        }
+
+        if(action.bossTier.isBoss()) {
             return;
         }
 
@@ -47,7 +54,7 @@ public class LastLegendaryListener {
     }
 
     @SubscribeEvent
-    public void onLegendaryCapture(CaptureEvent event) {
+    public void onLegendaryCapture(CaptureEvent.SuccessfulCapture event) {
 
         PixelmonEntity entity = event.getPokemon();
 
