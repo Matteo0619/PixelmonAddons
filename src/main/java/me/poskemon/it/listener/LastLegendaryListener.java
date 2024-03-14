@@ -27,14 +27,13 @@ public class LastLegendaryListener {
 
     @SubscribeEvent
     public void onLegendarySpawn(SpawnEvent event) {
-
-        SpawnActionPokemon action = (SpawnActionPokemon) event.action;
-
-        Entity entity = action.getOrCreateEntity();
+        Entity entity = event.action.getOrCreateEntity();
 
         if(!(entity instanceof PixelmonEntity)) {
             return;
         }
+
+        SpawnActionPokemon action = (SpawnActionPokemon) event.action;
 
         if(action.bossTier.isBoss()) {
             return;
