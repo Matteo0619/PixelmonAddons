@@ -31,7 +31,7 @@ public class PokemonTypeCommand {
                     context.getSource().sendSuccess(message, false);
                     return 0;
                 })
-                .then(Commands.argument("pokemon", StringArgumentType.greedyString())
+                .then(Commands.argument("pokemon", StringArgumentType.word())
                         .suggests((a, b) -> {
                             return ISuggestionProvider.suggest(PixelmonSpecies.getAll().stream().map(Species::getName), b);})
                         .executes(context -> {
@@ -52,7 +52,14 @@ public class PokemonTypeCommand {
                                 return 0;
                             }
 
-                            String pokemonName = context.getArgument("pokemon", String.class);
+                            String[] arr = context.getArgument("pokemon", String.class).split("_");
+
+                            String pokemonName = arr[0];
+
+                            String form = "";
+                            if(arr.length > 1) {
+                                form = getCorrectForm(arr[1]);
+                            }
 
                             Optional<RegistryValue<Species>> optional = PixelmonSpecies.get(pokemonName);
 
@@ -73,7 +80,7 @@ public class PokemonTypeCommand {
 
                             Species pokemon = optional.get().getValueUnsafe();
 
-                            List<Element> elements = pokemon.getDefaultForm().getTypes();
+                            List<Element> elements = pokemon.getForm(form).getTypes();
 
                             List<Element> all = Element.getElements().stream().filter(e -> !Element.MYSTERY.equals(e)).collect(Collectors.toList());
 
@@ -118,49 +125,45 @@ public class PokemonTypeCommand {
 
         context.getSource().sendSuccess(line, false);
 
-        if(!map.get(4.0F).isEmpty()) {
-            StringTextComponent message = new StringTextComponent("x4: ");
-            message.setStyle(message.getStyle().applyFormat(TextFormatting.AQUA));
-            for(StringTextComponent t : map.get(4.0F)) {
+        buildWeaknessMessage(map, 4.0F, "x4: ", TextFormatting.AQUA, context);
+
+        buildWeaknessMessage(map, 2.0F, "x2: ", TextFormatting.GREEN, context);
+
+        buildWeaknessMessage(map, 0.5F, "x0.5: ", TextFormatting.RED, context);
+
+        buildWeaknessMessage(map, 0.25F, "x0.25: ", TextFormatting.DARK_PURPLE, context);
+
+        buildWeaknessMessage(map, 0.0F, "x0: ", TextFormatting.DARK_GRAY, context);
+    }
+
+    private static void buildWeaknessMessage(Map<Float, Set<StringTextComponent>> map, float key, String p_i45159_1_, TextFormatting aqua, CommandContext<CommandSource> context) {
+        if (!map.get(key).isEmpty()) {
+            StringTextComponent message = new StringTextComponent(p_i45159_1_);
+            message.setStyle(message.getStyle().applyFormat(aqua));
+            for (StringTextComponent t : map.get(key)) {
                 message.append(t).append(" ");
             }
             context.getSource().sendSuccess(message, false);
         }
+    }
 
-        if(!map.get(2.0F).isEmpty()) {
-            StringTextComponent message = new StringTextComponent("x2: ");
-            message.setStyle(message.getStyle().applyFormat(TextFormatting.GREEN));
-            for(StringTextComponent t : map.get(2.0F)) {
-                message.append(t).append(" ");
-            }
-            context.getSource().sendSuccess(message, false);
-        }
+    private static String getCorrectForm(String form) {
 
-        if(!map.get(0.5F).isEmpty()) {
-            StringTextComponent message = new StringTextComponent("x0.5: ");
-            message.setStyle(message.getStyle().applyFormat(TextFormatting.RED));
-            for(StringTextComponent t : map.get(0.5F)) {
-                message.append(t).append(" ");
-            }
-            context.getSource().sendSuccess(message, false);
-        }
+        switch (form.toLowerCase()) {
+            case "hisui" :
+            case "hisuian" :
+                return "hisuian";
 
-        if(!map.get(0.25F).isEmpty()) {
-            StringTextComponent message = new StringTextComponent("x0.25: ");
-            message.setStyle(message.getStyle().applyFormat(TextFormatting.DARK_PURPLE));
-            for(StringTextComponent t : map.get(0.25F)) {
-                message.append(t).append(" ");
-            }
-            context.getSource().sendSuccess(message, false);
-        }
+            case "galar" :
+            case "galarian" :
+                return "galarian";
 
-        if(!map.get(0.0F).isEmpty()) {
-            StringTextComponent message = new StringTextComponent("x0: ");
-            message.setStyle(message.getStyle().applyFormat(TextFormatting.DARK_GRAY));
-            for(StringTextComponent t : map.get(0.0F)) {
-                message.append(t).append(" ");
-            }
-            context.getSource().sendSuccess(message, false);
+            case "alola" :
+            case "alolan" :
+                return "alolan";
+
+            default:
+                return "";
         }
     }
 
