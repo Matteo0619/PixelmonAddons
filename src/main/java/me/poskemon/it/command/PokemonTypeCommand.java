@@ -56,11 +56,6 @@ public class PokemonTypeCommand {
 
                             String pokemonName = arr[0];
 
-                            String form = "";
-                            if(arr.length > 1) {
-                                form = getCorrectForm(arr[1]);
-                            }
-
                             Optional<RegistryValue<Species>> optional = PixelmonSpecies.get(pokemonName);
 
                             if(!optional.isPresent()) {
@@ -70,6 +65,13 @@ public class PokemonTypeCommand {
                                 return 0;
                             }
 
+                            Species pokemon = optional.get().getValueUnsafe();
+
+                            String form = pokemon.getDefaultForm().getName();
+                            if(arr.length > 1) {
+                                form = getCorrectForm(arr[1], pokemon);
+                            }
+
                             Map<Float, Set<StringTextComponent>> map = new HashMap<>();
 
                             map.put(4.0F, new HashSet<>());
@@ -77,8 +79,6 @@ public class PokemonTypeCommand {
                             map.put(0.5F, new HashSet<>());
                             map.put(0.25F, new HashSet<>());
                             map.put(0.0F, new HashSet<>());
-
-                            Species pokemon = optional.get().getValueUnsafe();
 
                             List<Element> elements = pokemon.getForm(form).getTypes();
 
@@ -147,23 +147,23 @@ public class PokemonTypeCommand {
         }
     }
 
-    private static String getCorrectForm(String form) {
+    private static String getCorrectForm(String form, Species species) {
 
         switch (form.toLowerCase()) {
             case "hisui" :
             case "hisuian" :
-                return "hisuian";
+                return species.hasForm("hisuian") ? "hisuian" : species.getDefaultForm().getName();
 
             case "galar" :
             case "galarian" :
-                return "galarian";
+                return species.hasForm("galarian") ? "galarian" : species.getDefaultForm().getName();
 
             case "alola" :
             case "alolan" :
-                return "alolan";
+                return species.hasForm("alolan") ? "alolan" : species.getDefaultForm().getName();
 
             default:
-                return "";
+                return species.hasForm(form) ? form.toLowerCase() : species.getDefaultForm().getName();
         }
     }
 

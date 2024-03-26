@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.pokemon.species.Stats;
 import com.pixelmonmod.pixelmon.api.pokemon.species.gender.Gender;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
@@ -66,15 +67,17 @@ public class ChangeGenderCommand {
 
                             Pokemon pokemon = party.get(slot-1);
 
+                            Stats stat = pokemon.getForm();
+
                             Gender gender = pokemon.getGender();
 
-                            if(Gender.NONE.equals(gender)) {
+                            if(Gender.MALE.equals(gender) && stat.getMalePercentage() < 100f) {
+                                pokemon.setGender(Gender.FEMALE);
+                            } else if(Gender.FEMALE.equals(gender) && stat.getMalePercentage() > 0f) {
+                                pokemon.setGender(Gender.MALE);
+                            } else {
                                 context.getSource().sendFailure(new StringTextComponent("You cannot change gender to this pokemon"));
                                 return 0;
-                            } else if(Gender.MALE.equals(gender)) {
-                                pokemon.setGender(Gender.FEMALE);
-                            } else {
-                                pokemon.setGender(Gender.MALE);
                             }
 
                             StringTextComponent success = new StringTextComponent("Gender correctly changed");
