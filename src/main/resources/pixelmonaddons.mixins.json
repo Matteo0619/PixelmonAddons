@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_11",
+  "package": "me.poskemon.it.mixins",
+  "refmap": "mixins.pixelmonaddons.refmap.json",
+  "mixins": [
+    "BreedCommandMixin",
+    "HatchCommandMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

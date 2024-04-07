@@ -1,8 +1,10 @@
 package me.poskemon.it;
 
+
 import com.pixelmonmod.pixelmon.api.config.api.yaml.YamlConfigFactory;
 import me.poskemon.it.command.*;
 import me.poskemon.it.config.CommandsConfig;
+import me.poskemon.it.config.MessageConfig;
 import me.poskemon.it.listener.LastLegendaryListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -19,7 +21,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Mod(PixelmonAddons.MOD_ID)
 @Mod.EventBusSubscriber(modid = PixelmonAddons.MOD_ID)
@@ -30,9 +35,15 @@ public class PixelmonAddons {
 
     private static PixelmonAddons instance;
 
-    private CommandsConfig config;
+    private CommandsConfig commandsConfig;
+
+    private MessageConfig messageConfig;
 
     private static Map<UUID, LastLegendaryData> lastLegendaries = new HashMap<>();
+
+    private static Map<UUID, LocalDateTime> breedCooldown = new HashMap<>();
+
+    private static Map<UUID, LocalDateTime> hatchCooldown = new HashMap<>();
 
     public PixelmonAddons() {
         instance = this;
@@ -57,7 +68,8 @@ public class PixelmonAddons {
 
     public void reloadConfig() {
         try {
-            this.config = YamlConfigFactory.getInstance(CommandsConfig.class);
+            commandsConfig = YamlConfigFactory.getInstance(CommandsConfig.class);
+            messageConfig = YamlConfigFactory.getInstance(MessageConfig.class);
         } catch (IOException e) {
             LOGGER.error("Failed to load config", e);
         }
@@ -98,12 +110,22 @@ public class PixelmonAddons {
         return LOGGER;
     }
 
-    public static CommandsConfig getConfig() {
-        return instance.config;
+    public static CommandsConfig getCommandConfig() {
+        return instance.commandsConfig;
     }
+
+    public static MessageConfig getMessageConfig() { return  instance.messageConfig; }
 
     public static Map<UUID, LastLegendaryData> getLastLegendaries() {
         return lastLegendaries;
+    }
+
+    public static Map<UUID, LocalDateTime> getBreedCooldown() {
+        return breedCooldown;
+    }
+
+    public static Map<UUID, LocalDateTime> getHatchCooldown() {
+        return hatchCooldown;
     }
 }
 

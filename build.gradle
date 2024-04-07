@@ -1,7 +1,22 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        mavenCentral()
+    }
+
+
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
 plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
+
+apply plugin: 'org.spongepowered.mixin'
 
 version = mod_version
 group = mod_group_id
@@ -33,10 +48,12 @@ minecraft {
         }
 
         client {
+            arg "-mixin.config=pixelmonaddons.mixins.json"
             property 'forge.enabledGameTestNamespaces', mod_id
         }
 
         server {
+            arg "-mixin.config=pixelmonaddons.mixins.json"
             property 'forge.enabledGameTestNamespaces', mod_id
             args '--nogui'
         }
@@ -77,12 +94,18 @@ repositories {
     }
 }
 
-
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation fg.deobf("pixelmon:Pixelmon-${minecraft_version}-${pixelmon_version}-universal:${pixelmon_version}")
 
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+}
+
+mixin {
+    add sourceSets.main, "mixins.pixelmonaddons.refmap.json"
 }
 
 tasks.withType(JavaCompile) {
@@ -122,7 +145,10 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : mod_authors,
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+                "TweakOrder": 0,
+                "MixinConfigs" : "pixelmonaddons.mixins.json"
         ])
     }
 }
@@ -139,7 +165,6 @@ task versionedRelease(type: Copy) { // This creates a jar with a version number 
         filename.replace(".jar", "-${project.version}.jar")
     }
 }
-
 
 jar.finalizedBy('shadowJar')
 build.finalizedBy('versionedRelease')

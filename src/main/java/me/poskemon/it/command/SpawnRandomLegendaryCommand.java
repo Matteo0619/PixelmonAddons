@@ -4,18 +4,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.pixelmonmod.api.pokemon.PokemonSpecification;
-import com.pixelmonmod.api.pokemon.PokemonSpecificationProxy;
-import com.pixelmonmod.api.pokemon.requirement.impl.IVsRequirement;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonBuilder;
-import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
-import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.IVStore;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
-import com.pixelmonmod.pixelmon.spawning.LegendarySpawner;
 import me.poskemon.it.PixelmonAddons;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -26,10 +20,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class SpawnRandomLegendaryCommand {
 
@@ -105,7 +95,7 @@ public class SpawnRandomLegendaryCommand {
             specie = PixelmonSpecies.getRandomLegendary(false);
         } while (!isSpecieValid(specie));
 
-        int level = PixelmonAddons.getConfig().getRandomLegendaryLevel();
+        int level = PixelmonAddons.getCommandConfig().getRandomLegendaryLevel();
 
         Pokemon pokemon = PokemonBuilder.builder()
                 .species(specie.getDex())
@@ -130,7 +120,7 @@ public class SpawnRandomLegendaryCommand {
 
     private static boolean isSpecieValid(Species species) {
 
-        return !PixelmonAddons.getConfig().getBlacklistedLegendaries().contains(species.getName());
+        return !PixelmonAddons.getCommandConfig().getBlacklistedLegendaries().contains(species.getName());
 
     }
 

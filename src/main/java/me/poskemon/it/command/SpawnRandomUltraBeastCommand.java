@@ -93,7 +93,7 @@ public class SpawnRandomUltraBeastCommand {
 
         specie = PixelmonSpecies.getRandomUltraBeast();
 
-        int level = PixelmonAddons.getConfig().getRandomLegendaryLevel();
+        int level = PixelmonAddons.getCommandConfig().getRandomLegendaryLevel();
 
         Pokemon pokemon = PokemonBuilder.builder()
                 .species(specie.getDex())
