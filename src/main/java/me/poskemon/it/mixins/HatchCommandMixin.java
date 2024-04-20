@@ -78,7 +78,7 @@ public abstract class HatchCommandMixin extends PixelCommand {
     @Inject(method = "execute", at = @At("TAIL"), remap = false)
     private void injectTail(CommandSource sender, String[] args, CallbackInfo ci) {
 
-        Map<UUID, LocalDateTime> map = PixelmonAddons.getBreedCooldown();
+        Map<UUID, LocalDateTime> map = PixelmonAddons.getHatchCooldown();
 
         ServerPlayerEntity player = PixelmonCommandUtils.requireEntityPlayer(args[0]);
 
