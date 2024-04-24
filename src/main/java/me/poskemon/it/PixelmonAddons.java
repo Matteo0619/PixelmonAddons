@@ -6,6 +6,8 @@ import me.poskemon.it.command.*;
 import me.poskemon.it.config.CommandsConfig;
 import me.poskemon.it.config.MessageConfig;
 import me.poskemon.it.listener.LastLegendaryListener;
+import me.poskemon.it.listener.UtilityListener;
+import net.minecraft.util.Util;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -63,6 +65,7 @@ public class PixelmonAddons {
 
     @SubscribeEvent
     public static void onServerStarting(FMLServerStartingEvent event) {
+        new UtilityListener();
         new LastLegendaryListener();
     }
 
